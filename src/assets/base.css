@@ -49,7 +49,7 @@ body{
 .router-slide-right-enter-active,
 .router-slide-right-leave-active {
 
-  transition: transform .3s;
+  transition: transform 350ms;
 }
 
 .router-slide-right-enter-from {
@@ -84,4 +84,16 @@ body{
   transform: translateX(100%);
 }
 
+.sub-layout.router-slide-right-enter-active,
+.sub-layout.router-slide-left-leave-active{
+  z-index: 1;
+  box-shadow: -5px 0 10px rgba(0, 0, 0, 0.1); /* 左边阴影 */
+  background: rgb(240, 242, 245);
+}
 
+.main-layout.router-slide-right-leave-to,
+.main-layout.router-slide-left-enter-from{
+  z-index: -1;
+  transform: translateX(-60%);
+
+}

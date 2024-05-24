@@ -46,66 +46,64 @@ const router = createRouter({
 const historyStack = ref([])
 // 路由动画缓存
 const routerAnimation = reactive({
-    // App大层是否需要动画
-    needAnimation: true,
-    // 主页面动画
+    needAnimation: true, // App大层是否需要动画
     main: {
         back: false,
         needAnimation: false,
     },
-    // 子页面动画
     sub: {
-        // 是否是返回
-        back: false,
+        back: false, // 子页面动画是否是返回
     }
 })
-// 主要路由
-const mainRoutes = ['Home', 'Battle', 'Backpack', 'Payment', 'Profile'];
+const mainRoutes = ['Home', 'Battle', 'Backpack', 'Payment', 'Profile']
 
 router.beforeEach((to, from, next) => {
-    if (from.matched.length === 0) {
+    const isInitialRoute = from.matched.length === 0
+    // 是否去主页面
+    const isToMainRoute = mainRoutes.includes(to.name)
+    // 是否来自主页面来
+    const isFromMainRoute = mainRoutes.includes(from.name)
+
+    if (isInitialRoute) {
         historyStack.value = [to.fullPath]
         routerAnimation.main.needAnimation = false
         routerAnimation.needAnimation = false
     } else {
         historyStack.value.push(to.fullPath)
-        console.log(2, historyStack.value)
-        // console.log(routerAnimation, to.name, from.name)
-        // 子页面动画 去的界面不是主页面 或者 不是从主页面离开
-        if (!mainRoutes.includes(to.name) || (!mainRoutes.includes(from.name) || !from.name)) {
+
+        if (!isToMainRoute || !isFromMainRoute) {
             routerAnimation.needAnimation = true
-            if (mainRoutes.includes(to.name) || mainRoutes.includes(from.name)) {
-                // 去主页面或者从主页面离开 都要禁止主页面的动画
+
+            if (isToMainRoute || isFromMainRoute) {
                 routerAnimation.main.needAnimation = false
                 routerAnimation.sub.back = false
-                // 返回主页面清空历史记录
-                if (mainRoutes.includes(to.name)) historyStack.value.length = 0;
+
+                if (isToMainRoute) {
+                    historyStack.value.length = 0
+                }
             } else {
                 const fromIndex = historyStack.value.indexOf(from.fullPath)
                 const toIndex = historyStack.value.indexOf(to.fullPath)
-                console.log(historyStack.value, from.fullPath, to.fullPath, fromIndex, toIndex)
+
                 if (toIndex !== -1 && fromIndex !== -1) {
                     routerAnimation.sub.back = toIndex < fromIndex
                     if (routerAnimation.sub.back) {
-                        historyStack.value.splice(fromIndex, toIndex < fromIndex ? 1 : 0);
+                        historyStack.value.splice(fromIndex, 1)
                     }
                 } else {
                     routerAnimation.sub.back = false
                 }
             }
         } else {
-            // 主页面动画
             routerAnimation.needAnimation = false
             routerAnimation.main.needAnimation = true
             routerAnimation.main.back = to.meta.index < from.meta.index
-
         }
-
     }
-
 
     next()
 })
+
 
 export default router
 export {routerAnimation, historyStack}
