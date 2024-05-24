@@ -5,7 +5,7 @@ body{
 .router-link-active {
   font-weight: bold;
 }
-
+/* 主页面切换特效 Start */
 .slide-left-enter-active,
 .slide-left-leave-active,
 .slide-right-enter-active,
@@ -44,6 +44,9 @@ body{
 .slide-left-leave-to {
   transform: translateX(100%);
 }
+/* 主页面切换特效 END */
+/* 子页面切换特效 Start */
+
 .router-slide-left-enter-active,
 .router-slide-left-leave-active,
 .router-slide-right-enter-active,
@@ -97,3 +100,4 @@ body{
   transform: translateX(-60%);
 
 }
+/* 子页面切换特效 END */
